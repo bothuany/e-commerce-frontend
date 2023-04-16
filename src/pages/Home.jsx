@@ -1,11 +1,11 @@
 import React from 'react'
 import Products from '../components/Products'
 
-function HomePage() {
+function Home() {
     
   return (
     <Products></Products>
   )
 }
 
-export default HomePage
+export default Home
