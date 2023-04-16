@@ -67,12 +67,13 @@ function Cart() {
               </span>
             </a>
           </p>
+
           {/* ::Clear Button */}
           <button
             onClick={() => {
               clearCart();
             }}
-            className="py-2 w-full rounded bg-red-500 text-center text-base text-white hover:bg-red-600"
+            className="mt-2 py-2 w-full rounded bg-red-500 text-center text-base text-white hover:bg-red-600"
           >
             Clear
           </button>

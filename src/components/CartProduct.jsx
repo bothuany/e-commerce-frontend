@@ -31,9 +31,9 @@ function CartProduct({ product, index }) {
           >
             {product.name}
           </a>
-          <span className="text-lg text-gray-700 font-semibold">{`$${product.price.toFixed(
-            2
-          )}`}</span>
+          <span className="text-lg text-gray-700 font-semibold">{`$${(
+            product.price * product.quantity
+          ).toFixed(2)}`}</span>
         </div>
         {/* :::Color */}
         <p className="mt-1 text-sm text-gray-400 capitalize">{product.color}</p>
