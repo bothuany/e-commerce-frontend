@@ -7,7 +7,7 @@ import {
   ShoppingBagIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { useCart } from "../contexts/CartContext";
+
 import Footer from "../components/Footer";
 
 const navigation = {
@@ -146,7 +146,6 @@ function classNames(...classes) {
 
 export default function Layout() {
   const [open, setOpen] = useState(false);
-  const { cartItems } = useCart();
 
   return (
     <>
@@ -492,7 +491,7 @@ export default function Layout() {
                   {/* Search */}
                   <div className="flex lg:ml-6">
                     <Link
-                      to="#"
+                      to="/search"
                       className="p-2 text-gray-400 hover:text-gray-500"
                     >
                       <span className="sr-only">Search</span>
