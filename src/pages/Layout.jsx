@@ -8,6 +8,8 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 
+import Footer from "../components/Footer";
+
 const navigation = {
   categories: [
     {
@@ -521,6 +523,7 @@ export default function Layout() {
         </header>
       </div>
       <Outlet />
+      <Footer></Footer>
     </>
   );
 }
