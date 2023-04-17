@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import CartProducts from "../components/CartProducts";
 import { useCart } from "../contexts/CartContext";
+import { Link } from "react-router-dom";
 function Cart() {
   const { cartItems, clearCart } = useCart();
 
@@ -46,18 +47,18 @@ function Cart() {
         {/* :ACTIONS */}
         <div className="px-10 w-full flex flex-col">
           {/* ::Checkout Button */}
-          <a
-            href="#goToCheckout"
+          <Link
+            to="/checkout"
             className="py-2 w-full rounded bg-indigo-500 text-center text-base text-white hover:bg-indigo-600"
           >
             Checkout
-          </a>
+          </Link>
 
           {/* ::Continue Shopping */}
           <p className="mt-3 text-center text-base text-gray-500">
             or{" "}
-            <a
-              href="#shoppingPage"
+            <Link
+              to="/search"
               className="inline-flex items-center text-center text-sm text-indigo-500 hover:text-indigo-600 font-semibold"
             >
               Continue Shopping
@@ -65,7 +66,7 @@ function Cart() {
                 {" "}
                 &rarr;
               </span>
-            </a>
+            </Link>
           </p>
 
           {/* ::Clear Button */}
