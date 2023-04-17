@@ -21,14 +21,17 @@ const Footer = () => {
             {/* :::Social */}
             <span className="inline-flex mt-6 w-full justify-center md:justify-start md:w-auto">
               {/* GitHub */}
-              <a href="#" class="fa-brands fa-github fa-lg ml-3 text-gray-300">
+              <a
+                href="#"
+                className="fa-brands fa-github fa-lg ml-3 text-gray-300"
+              >
                 <span className="sr-only">GitHub</span>
               </a>
 
               {/* Linkedin */}
               <a
                 href="#"
-                class="fa-brands fa-linkedin fa-lg ml-3 text-gray-300"
+                className="fa-brands fa-linkedin fa-lg ml-3 text-gray-300"
               >
                 <span className="sr-only">Linkedin</span>
               </a>
@@ -61,7 +64,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="#link" className="hover:text-gray-200">
+                <Link to="/contact" className="hover:text-gray-200">
                   Contact
                 </Link>
               </li>

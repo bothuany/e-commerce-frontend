@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PasswordChecklist from "react-password-checklist";
-
+import Alert from "../components/Alert";
 
 function SignUp() {
   const [password, setPassword] = useState("");
@@ -11,6 +11,9 @@ function SignUp() {
   function handleSetMatchPassword(event) {
     setPasswordAgain(event.target.value);
   }
+
+  const [showAlert, setShowAlert] = useState(false);
+
   return (
     <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-7 lg:px-8">
       <div className="w-full max-w-md space-y-8">
@@ -141,6 +144,7 @@ function SignUp() {
           <div>
             <button
               type="submit"
+              onClick={() => setShowAlert(true)}
               className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Sign up
@@ -148,6 +152,15 @@ function SignUp() {
           </div>
         </form>
       </div>
+      {showAlert ? (
+        <Alert
+          type="success"
+          title="Success"
+          text="You signed up"
+          showAlert={showAlert}
+          setShowAlert={setShowAlert}
+        />
+      ) : null}
     </div>
   );
 }

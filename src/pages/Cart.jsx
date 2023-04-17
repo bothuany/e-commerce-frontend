@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CartProducts from "../components/CartProducts";
 import { useCart } from "../contexts/CartContext";
 import { Link } from "react-router-dom";
+import Modal from "../components/Modal";
+import Alert from "../components/Alert";
 function Cart() {
   const { cartItems, clearCart } = useCart();
 
@@ -15,6 +17,7 @@ function Cart() {
       0
     );
   }, [cartItems]);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <div className="mx-auto py-5 w-full max-w-3xl bg-white">
@@ -53,7 +56,6 @@ function Cart() {
           >
             Checkout
           </Link>
-
           {/* ::Continue Shopping */}
           <p className="mt-3 text-center text-base text-gray-500">
             or{" "}
@@ -72,7 +74,7 @@ function Cart() {
           {/* ::Clear Button */}
           <button
             onClick={() => {
-              clearCart();
+              setShowModal(true);
             }}
             className="mt-2 py-2 w-full rounded bg-red-500 text-center text-base text-white hover:bg-red-600"
           >
@@ -80,6 +82,14 @@ function Cart() {
           </button>
         </div>
       </div>
+      <Modal
+        title={"Warning"}
+        text={"Your cart is going to be cleared. Are you sure?"}
+        acceptMessage={"Yes"}
+        acceptAction={clearCart}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
     </div>
   );
 }
