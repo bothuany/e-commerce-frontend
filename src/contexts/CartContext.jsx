@@ -30,7 +30,7 @@ const tempProducts = [
 ];
 const CartContext = createContext();
 
-const CartContextProvider = ({ children }) => {
+const CartProvider = ({ children }) => {
   //const [cartItems, setCartItems] = useState([]);
   const [cartItems, setCartItems] = useState(tempProducts);
 
@@ -70,4 +70,4 @@ const CartContextProvider = ({ children }) => {
   return <CartContext.Provider value={values}>{children}</CartContext.Provider>;
 };
 const useCart = () => useContext(CartContext);
-export { useCart, CartContextProvider };
+export { useCart, CartProvider };

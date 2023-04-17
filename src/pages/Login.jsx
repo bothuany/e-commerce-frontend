@@ -1,7 +1,8 @@
-import React from "react";
-
+import React, { useState } from "react";
+import Alert from "../components/Alert";
 
 function Login() {
+  const [showAlert, setShowAlert] = useState(false);
   return (
     <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
@@ -84,6 +85,7 @@ function Login() {
           <div>
             <button
               type="submit"
+              onClick={() => setShowAlert(true)}
               className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Sign in
@@ -91,6 +93,15 @@ function Login() {
           </div>
         </form>
       </div>
+      {showAlert ? (
+        <Alert
+          type="success"
+          title="Success"
+          text="You logged in"
+          showAlert={showAlert}
+          setShowAlert={setShowAlert}
+        />
+      ) : null}
     </div>
   );
 }
