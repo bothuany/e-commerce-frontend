@@ -148,7 +148,7 @@ export default function Layout() {
   const [open, setOpen] = useState(false);
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <div className="bg-white">
         {/* Mobile menu */}
         <Transition.Root show={open} as={Fragment}>
@@ -524,6 +524,6 @@ export default function Layout() {
       </div>
       <Outlet />
       <Footer></Footer>
-    </>
+    </div>
   );
 }
