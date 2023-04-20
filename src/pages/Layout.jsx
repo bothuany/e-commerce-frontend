@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 import Footer from "../components/Footer";
+import bgTransparentLogo from "../images/transparent-bg-logo.png";
 
 const navigation = {
   categories: [
@@ -341,7 +342,7 @@ export default function Layout() {
                     <span className="sr-only">Your Company</span>
                     <img
                       className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                      src={bgTransparentLogo}
                       alt=""
                     />
                   </Link>

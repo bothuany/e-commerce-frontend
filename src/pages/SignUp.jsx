@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PasswordChecklist from "react-password-checklist";
 import Alert from "../components/Alert";
+import bgTransparentLogo from "../images/transparent-bg-logo.png";
 
 function SignUp() {
   const [password, setPassword] = useState("");
@@ -20,7 +21,7 @@ function SignUp() {
         <div>
           <img
             className="mx-auto h-12 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+            src={bgTransparentLogo}
             alt="Your Company"
           />
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">

@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import bgTransparentLogo from "../images/transparent-bg-logo.png";
 const Footer = () => {
   return (
-    <footer className="w-full py-5 sm:py-10 px-4 bg-indigo-900 mt-auto">
+    <footer className="w-full py-5 sm:py-10 px-4 bg-indigo-700 mt-auto">
       {" "}
       {/* Container */}
       <h2 className="sr-only">Footer</h2>
@@ -11,9 +11,14 @@ const Footer = () => {
         {/* :SITE NAME & SOCIAL NETWORKS */}
         <div className="relative mt-14 sm:mt-0 px-5 flex flex-col justify-center items-center text-gray-300">
           {/* ::Site name */}
-          <h1 className="font-title text-4xl text-center font-semibold mt-auto">
-            Trendidy
-          </h1>
+          <Link to="/">
+            <img
+              src={bgTransparentLogo}
+              alt="Logo"
+              width="200"
+              height="200"
+            ></img>
+          </Link>
           <br />
           <br />
           {/* ::Social & copyright */}
@@ -40,7 +45,7 @@ const Footer = () => {
 
             {/* :::Copyright */}
             <span className="py-4 text-xs">
-              &copy; {new Date().getFullYear()} , Trendidy All Rights Reserved.
+              &copy; {new Date().getFullYear()} , Wearwell All Rights Reserved.
             </span>
           </div>
           {/* ::Mobile separator line */}
@@ -79,7 +84,7 @@ const Footer = () => {
           {/* ::Email */}
           <div className="col-span-2 md:col-span-1 pb-0 md:py-3 px-4 flex flex-col items-center sm:items-start">
             <h3 className="py-1.5 md:py-4 text-xl text-gray-400 font-bold tracking-wide">
-              Trendidy Company
+              Wearwell Company
             </h3>
             <p className="inline-flex justify-center sm:justify-start text-sm text-gray-300 font-medium">
               <svg
