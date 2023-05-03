@@ -40,7 +40,7 @@ const Alert = ({ type, title, text, showAlert, setShowAlert }) => {
   }, [showAlert, setShowAlert]);
 
   const containerClassNames = `
-  fixed bottom-0 mb-10 rounded p-4 max-w-4xl flex border border-${color}-300 bg-${color}-100 
+    fixed bottom-0 mb-10 rounded p-4 max-w-4xl flex border border-${color}-300 bg-${color}-100 
     transition-opacity duration-500 ${isFadingOut ? "opacity-0" : ""}`;
 
   return (
