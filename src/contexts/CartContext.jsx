@@ -31,11 +31,12 @@ const tempProducts = [
 const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
-  //const [cartItems, setCartItems] = useState([]);
-  const [cartItems, setCartItems] = useState(tempProducts);
+  const [cartItems, setCartItems] = useState([]);
+  //const [cartItems, setCartItems] = useState(tempProducts);
 
   const addToCart = (item) => {
     setCartItems([...cartItems, item]);
+    console.log(cartItems);
   };
 
   const removeFromCart = (id) => {

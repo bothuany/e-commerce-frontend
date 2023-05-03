@@ -4,7 +4,7 @@ import QuantityInput from "./QuantityInput";
 import { useCart } from "../contexts/CartContext";
 
 function CartProduct({ product, index }) {
-  const { cartItems, removeFromCart, setItemQuantity } = useCart();
+  const { removeFromCart, setItemQuantity } = useCart();
   const handleQuantityChange = (newQuantity) => {
     setItemQuantity(product.id, newQuantity);
   };
@@ -16,8 +16,8 @@ function CartProduct({ product, index }) {
       {/* ::Picture */}
       <div className="flex-shrink-0 aspect-w-5 aspect-h-1 w-1/4 sm:w-1/5">
         <img
-          src={product.imageSrc}
-          alt={product.imageAlt}
+          src={product.images[0]}
+          alt="image"
           className="object-cover w-full h-full"
         />
       </div>
