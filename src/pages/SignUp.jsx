@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, Component } from "react";
 import PasswordChecklist from "react-password-checklist";
 import Alert from "../components/Alert";
-import bgTransparentLogo from "../images/transparent-bg-logo.png";
+
 
 function SignUp() {
   const [password, setPassword] = useState("");
@@ -13,15 +13,22 @@ function SignUp() {
     setPasswordAgain(event.target.value);
   }
 
+  const [type, setType] = useState("Customer");
+
+  const onOptionChange = (e) => {
+    setType(e.target.value);
+  };
   const [showAlert, setShowAlert] = useState(false);
+  
 
   return (
-    <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-7 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div>
+    <div className="w-full py-10 px-1 sm:px-5 flex flex-col ">
+    <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-7 lg:px-8 mb-16 text-center ">
+      <div className="w-full max-w-md space-y-8  ">
+        <div  >
           <img
             className="mx-auto h-12 w-auto"
-            src={bgTransparentLogo}
+            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
             alt="Your Company"
           />
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
@@ -29,43 +36,31 @@ function SignUp() {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600"></p>
         </div>
-        <form className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6 ">
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="-space-y-px rounded-md shadow-sm">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-m font-medium leading-6 text-gray-900"
-              >
-                Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="name"
-                required
-                className="relative block w-full rounded-t-md border-0 pl-2 py-1.5 text-gray-900  ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-8"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="surname"
-                className="block text-m font-medium leading-6 text-gray-900"
-              >
-                Surname
-              </label>
-              <input
-                id="surname"
-                name="surname"
-                type="name"
-                required
-                className="relative block w-full rounded-t-md border-0 py-1.5 pl-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-8"
-              />
-            </div>
+            
+           
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+      <div>
+        <label for="name" class="block text-sm font-semibold leading-6 text-gray-900">Name</label>
+        <div class="mt-2.5">
+          <input type="text" required name="name" placeholder="John" id="name"  class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+        </div>
+      </div>
+      <div>
+        <label for="surname" class="block text-sm font-semibold leading-6 text-gray-900">Surname</label>
+        <div class="mt-2.5">
+          <input type="text" required name="surname" id="surname" placeholder="Smith" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+        </div>
+      </div>
+      </div>
+
             <div>
               <label
                 htmlFor="email-address"
-                className="block text-m font-medium leading-6 text-gray-900"
+                className="block text-sm font-semibold leading-6 text-gray-900"
               >
                 Email address
               </label>
@@ -84,7 +79,7 @@ function SignUp() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-m font-medium leading-6 text-gray-900"
+                className="block text-sm font-semibold leading-6 text-gray-900"
               >
                 Password
               </label>
@@ -101,9 +96,9 @@ function SignUp() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-m font-medium leading-6 text-gray-900"
+                className="block text-sm font-semibold leading-6 text-gray-900"
               >
-                Password Again :
+                Password Again 
               </label>
               <input
                 id="passwordAgain"
@@ -124,6 +119,40 @@ function SignUp() {
             />
           </div>
 
+          <div class="col-span-full text-center" >
+            <div class="sm:col-span-2 sm:col-start-1">
+              <div class="mt-2">
+            <input
+              class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+              type="radio"
+              name="type"
+              value="Customer"
+              id="customer"
+              checked={type === "Customer"}
+              onChange={onOptionChange}
+            />
+            <label htmlFor="Customer" class="block text-sm font-medium leading-6 text-gray-900">Customer</label>
+            </div>
+            </div>
+            
+            <div class="sm:col-span-2">
+              <div class="mt-2">
+            <input
+              class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+              type="radio"
+              name="type"
+              value="Saler"
+              id="saler"
+              checked={type === "Saler"}
+              onChange={onOptionChange}
+            />
+            <label htmlFor="saler" class="block text-sm font-medium leading-6 text-gray-900">Saler</label>
+            </div>
+            </div>
+          </div>
+
+          
+
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
@@ -137,10 +166,12 @@ function SignUp() {
                 htmlFor="terms"
                 className="ml-2 block text-sm text-gray-900"
               >
-                I accept the terms of membership.
+                I accept the Terms of Use & Privacy Policy.
               </label>
             </div>
           </div>
+
+           
 
           <div>
             <button
@@ -163,6 +194,8 @@ function SignUp() {
         />
       ) : null}
     </div>
+   </div>
+    
   );
 }
 
