@@ -8,6 +8,7 @@ const product = {
   name: "Basic Tee 6-Pack",
   price: 192,
   href: "#",
+  companyName: "Koton",
   breadcrumbs: [
     { id: 1, name: "Men", href: "#" },
     { id: 2, name: "Clothing", href: "#" },

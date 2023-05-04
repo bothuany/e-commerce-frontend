@@ -6,72 +6,68 @@ function Products() {
     {
       id: 1,
       name: "Basic Tee",
-      href: "#",
-      imageSrc:
+      description: "T-shirt",
+      price: 31,
+      images: [
         "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      imageAlt: "Front of men's Basic Tee in black.",
-      price: "$35",
-      color: "Black",
+        "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
+      ],
+      category: {
+        id: 1,
+        name: "clothes",
+      },
+      seller: {
+        id: 1,
+        name: "oscar",
+        email: "oscar@gmail.com",
+        phoneNumber: "31313131",
+        companyName: "Koton",
+        companyPhone: "1313131",
+      },
     },
     {
-      id: 1,
+      id: 2,
       name: "Basic Tee",
-      href: "#",
-      imageSrc:
+      description: "T-shirt",
+      price: 31,
+      images: [
         "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      imageAlt: "Front of men's Basic Tee in black.",
-      price: "$35",
-      color: "Black",
+        "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
+      ],
+      category: {
+        id: 1,
+        name: "clothes",
+      },
+      seller: {
+        id: 1,
+        name: "oscar",
+        email: "oscar@gmail.com",
+        phoneNumber: "31313131",
+        companyName: "Koton",
+        companyPhone: "1313131",
+      },
     },
     {
-      id: 1,
+      id: 3,
       name: "Basic Tee",
-      href: "#",
-      imageSrc:
+      description: "T-shirt",
+      price: 31,
+      images: [
         "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      imageAlt: "Front of men's Basic Tee in black.",
-      price: "$35",
-      color: "Black",
-    },
-    {
-      id: 1,
-      name: "Basic Tee",
-      href: "#",
-      imageSrc:
         "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      imageAlt: "Front of men's Basic Tee in black.",
-      price: "$35",
-      color: "Black",
-    },
-    {
-      id: 1,
-      name: "Basic Tee",
-      href: "#",
-      imageSrc:
-        "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      imageAlt: "Front of men's Basic Tee in black.",
-      price: "$35",
-      color: "Black",
-    },
-    {
-      id: 1,
-      name: "Basic Tee",
-      href: "#",
-      imageSrc:
-        "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      imageAlt: "Front of men's Basic Tee in black.",
-      price: "$35",
-      color: "Black",
-    },
-    {
-      id: 1,
-      name: "Basic Tee",
-      href: "#",
-      imageSrc:
-        "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      imageAlt: "Front of men's Basic Tee in black.",
-      price: "$35",
-      color: "Black",
+      ],
+      category: {
+        id: 1,
+        name: "clothes",
+      },
+      seller: {
+        id: 1,
+        name: "oscar",
+        email: "oscar@gmail.com",
+        phoneNumber: "31313131",
+        companyName: "Koton",
+        companyPhone: "1313131",
+      },
     },
   ];
   return (
