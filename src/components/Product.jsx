@@ -7,8 +7,8 @@ function Product({ product }) {
     <div key={product.id} className="group relative">
       <div className="min-h-80 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
         <img
-          src={product.imageSrc}
-          alt={product.imageAlt}
+          src={product.images[0]}
+          alt="image"
           className="h-full w-full object-cover object-center lg:h-full lg:w-full"
         />
       </div>
@@ -20,9 +20,13 @@ function Product({ product }) {
               {product.name}
             </Link>
           </h3>
-          <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+          <p className="mt-1 text-sm text-gray-500">
+            {product.seller.companyName}
+          </p>
         </div>
-        <p className="text-sm font-medium text-gray-900">{product.price}</p>
+        <p className="text-sm font-medium text-gray-900">{`$${product.price.toFixed(
+          2
+        )}`}</p>
       </div>
     </div>
   );

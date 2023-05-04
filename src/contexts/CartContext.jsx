@@ -1,42 +1,46 @@
 import React, { useState, createContext, useContext } from "react";
 
-const tempProducts = [
-  {
-    id: 1,
-    name: "Funny Shirt Dog",
-    href: "#productLink",
-    price: 40,
-    color: "black",
-    size: "medium",
-    stock: "In stock",
-    quantity: 1,
-    imageSrc:
-      "https://fancytailwind.com/static/tshirt-drole4-fc12e960a18b5db459e63da559b564fa.webp",
-    imageAlt: "Description of the product picture",
-  },
-  {
-    id: 2,
-    name: "Funny Shirt Monkey",
-    href: "#productLink",
-    price: 28,
-    color: "green",
-    size: "Large",
-    stock: "Will ship in 7-15 days",
-    quantity: 1,
-    imageSrc:
-      "https://fancytailwind.com/static/tshirt-drole3-0f77e5c73ae6e9a95e8521c3b5495542.webp",
-    imageAlt: "Description of the product picture",
-  },
-];
 const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
-  //const [cartItems, setCartItems] = useState(tempProducts);
 
-  const addToCart = (item) => {
-    setCartItems([...cartItems, item]);
-    console.log(cartItems);
+  const addToCart = (newItem) => {
+    let info = isProductWithFeaturesAlreadyAdded(newItem);
+    console.log(info);
+
+    if (!info) {
+      console.log("aaaa");
+      setCartItems([...cartItems, newItem]);
+    } else {
+      console.log("bbbb");
+      cartItems.map((item) => {
+        if (item.id == info) {
+          item.quantity += 1;
+        }
+      });
+    }
+  };
+
+  const isProductWithFeaturesAlreadyAdded = (newItem) => {
+    let result = false;
+    cartItems.map((item) => {
+      /*if (
+        item.id === newItem.id &&
+        item.color.id === newItem.color.id &&
+        item.size.id === newItem.size.id
+      )*/
+      if (
+        item.id === newItem.id &&
+        item.color === newItem.color &&
+        item.size === newItem.size
+      ) {
+        result = item.id;
+        return item.id;
+      }
+    });
+
+    return result;
   };
 
   const removeFromCart = (id) => {
