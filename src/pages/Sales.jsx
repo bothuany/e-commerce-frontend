@@ -3,6 +3,10 @@ import Alert from "../components/Alert";
 import axios from "axios";
 import dir from "../dir.json";
 import HighlightsInput from "../components/HighlightsInput";
+import StocksInput from "../components/StocksInput";
+import ImagesInput from "../components/ImagesInput";
+import { useUser } from "../contexts/UserContext";
+
 function Sales() {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
@@ -11,16 +15,24 @@ function Sales() {
   const [price, setPrice] = useState(0);
   const [images, setImages] = useState([]);
   const [category, setCategory] = useState("");
-  const [size, setSize] = useState("");
-  const [color, setColor] = useState("");
-  const [quantity, setQuantity] = useState(0);
+
   const [categories, setCategories] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
 
-  useEffect(() => {
-    console.log(highlights);
-  }, [highlights]);
+  const [stocks, setStocks] = useState([
+    { id: 1, color: "", size: "", quantity: 0 },
+  ]);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertTitle, setAlertTitle] = useState("Success!");
+  const [alertText, setAlertText] = useState(
+    "You have successfully added a new product."
+  );
+
+  const { user } = useUser();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -43,13 +55,51 @@ function Sales() {
     fetchColors();
   }, []);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newProduct = {
+      product: {
+        name: productName,
+        description: description,
+        highlights: highlights,
+        details: details,
+        price: price,
+        categoryID: category,
+        images: images,
+      },
+      stocks: stocks,
+    };
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    await axios
+      .post(dir.api + "/api/products/put-on-sale", newProduct, config)
+      .then((res) => {
+        setAlertType("success");
+        setAlertTitle("Success!");
+        setAlertText("You have successfully added a new product.");
+        setShowAlert(true);
+      })
+      .catch((err) => {
+        setAlertType("error");
+        setAlertTitle("Error!");
+        setAlertText("Something went wrong. Please try again.");
+        setShowAlert(true);
+      });
+  };
+
   return (
     <section className="bg-white ">
       <div className="py-8 px-4 mx-auto max-w-6xl lg:py-16">
         <h2 className="mb-4 text-xl font-bold text-gray-900 ">
           Add a new product
         </h2>
-        <form action="#">
+        <form onSubmit={handleSubmit}>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <div className="sm:col-span-2">
               <label
@@ -69,39 +119,24 @@ function Sales() {
                 required=""
               />
             </div>
+            <ImagesInput images={images} setImages={setImages} />
+            <div>
+              <label
+                htmlFor="descriptions"
+                className="block mb-2 text-sm font-medium text-gray-900 "
+              >
+                Description
+              </label>
+              <textarea
+                id="descriptions"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows="4"
+                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500  "
+                placeholder="Write descriptions..."
+              ></textarea>
+            </div>
 
-            <div>
-              <label
-                htmlFor="description"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Description
-              </label>
-              <textarea
-                id="description"
-                rows="4"
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500  "
-                placeholder="Write a description..."
-              ></textarea>
-            </div>
-            <div>
-              <label
-                htmlFor="description"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Description
-              </label>
-              <textarea
-                id="description"
-                rows="4"
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500  "
-                placeholder="Write a description..."
-              ></textarea>
-            </div>
-            <HighlightsInput
-              highlights={highlights}
-              setHighlights={setHighlights}
-            />
             <div>
               <label
                 htmlFor="details"
@@ -111,6 +146,8 @@ function Sales() {
               </label>
               <textarea
                 id="details"
+                value={details}
+                onChange={(e) => setDetails(e.target.value)}
                 rows="4"
                 className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500  "
                 placeholder="Write details..."
@@ -126,6 +163,8 @@ function Sales() {
               </label>
               <input
                 type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
                 name="price"
                 id="price"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
@@ -142,6 +181,7 @@ function Sales() {
               </label>
               <select
                 id="category"
+                onChange={(e) => setCategory(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 "
               >
                 <option value="">Select category</option>
@@ -152,83 +192,37 @@ function Sales() {
                 ))}
               </select>
             </div>
-            <div>
-              <label
-                htmlFor="size"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Size
-              </label>
-              <select
-                id="size"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 "
-              >
-                <option value="">Select size</option>
-                {sizes.map((size) => (
-                  <option key={size.id} value={size.id}>
-                    {size.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label
-                htmlFor="color"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Color
-              </label>
-              <select
-                id="color"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 "
-              >
-                <option value="">Select color</option>
-                {colors.map((color) => (
-                  <option key={color.id} value={color.id}>
-                    {color.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-full">
-              <label
-                htmlFor="quantity"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Quantity
-              </label>
-              <input
-                type="number"
-                name="quantity"
-                id="quantity"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                placeholder="200"
-                required=""
-              />
-            </div>
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="description"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Description
-              </label>
-              <textarea
-                id="description"
-                rows="8"
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
-                placeholder="Your description here"
-              ></textarea>
-            </div>
+
+            <HighlightsInput
+              highlights={highlights}
+              setHighlights={setHighlights}
+            />
+            <StocksInput
+              colors={colors}
+              sizes={sizes}
+              stocks={stocks}
+              setStocks={setStocks}
+            />
           </div>
-          <button
-            type="submit"
-            className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-          >
-            Add product
-          </button>
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="mt-3 text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2"
+            >
+              Submit
+            </button>
+          </div>
         </form>
       </div>
+      {showAlert ? (
+        <Alert
+          type={alertType}
+          title={alertTitle}
+          text={alertText}
+          showAlert={showAlert}
+          setShowAlert={setShowAlert}
+        />
+      ) : null}
     </section>
   );
 }
