@@ -1,6 +1,6 @@
 import "./App.css";
 import Home from "./pages/Home";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Layout from "./pages/Layout";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
@@ -13,21 +13,19 @@ import Checkout from "./pages/Checkout";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" index element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/sales" element={<Sales />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/products/:name" element={<ProductDetail />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" index element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/sales" element={<Sales />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/products/:name" element={<ProductDetail />} />
+      </Route>
+    </Routes>
   );
 }
 
