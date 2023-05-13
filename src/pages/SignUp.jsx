@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PasswordChecklist from "react-password-checklist";
 import Alert from "../components/Alert";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import dir from "../dir.json";
 
 function SignUp() {
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -15,12 +18,21 @@ function SignUp() {
   const [companyPhoneNumber, setCompanyPhoneNumber] = useState("");
 
   const [showAlert, setShowAlert] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [alertType, setAlertType] = useState("success");
   const [alertTitle, setAlertTitle] = useState("Success!");
   const [alertText, setAlertText] = useState(
     "You have successfully registered."
   );
   const [type, setType] = useState("customer");
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userInfo"));
+
+    if (user) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   function handleSetPassword(event) {
     setPassword(event.target.value);
@@ -48,6 +60,7 @@ function SignUp() {
   }
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const userInfo = {
       role: type,
       name: name + " " + surname,
@@ -58,31 +71,32 @@ function SignUp() {
       companyPhoneNumber: companyPhoneNumber,
     };
 
-    try {
-      const config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      };
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    };
 
-      const { data } = await axios.post(
-        dir.api + "/api/auth/register",
-        userInfo,
-        config
-      );
+    await axios
+      .post(dir.api + "/api/auth/register", userInfo, config)
+      .then((res) => {
+        localStorage.setItem("userInfo", JSON.stringify(res.data));
+        setAlertType("success");
+        setAlertTitle("Success!");
+        setAlertText("You have successfully registered.");
+        setShowAlert(true);
+        navigate("/");
+      })
+      .catch((err) => {
+        setAlertType("error");
+        setAlertTitle("Error!");
+        setAlertText("You have entered an invalid information.");
+        setShowAlert(true);
+        setIsLoading(false);
+      });
 
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      setAlertType("success");
-      setAlertTitle("Success!");
-      setAlertText("You have successfully registered.");
-      setShowAlert(true);
-    } catch (err) {
-      setAlertType("error");
-      setAlertTitle("Error!");
-      setAlertText("You have entered an invalid information.");
-      setShowAlert(true);
-    }
+    setIsLoading(false);
   };
 
   const onOptionChange = (e) => {
@@ -159,7 +173,7 @@ function SignUp() {
                   >
                     Phone Number
                   </label>
-                  <div class="mt-2.5">
+                  <div className="mt-2.5">
                     <input
                       type="tel"
                       required
@@ -320,8 +334,12 @@ function SignUp() {
             <div>
               <button
                 type="submit"
-                onClick={() => setShowAlert(true)}
-                className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                disabled={isLoading}
+                className={`group relative flex w-full justify-center rounded-md ${
+                  isLoading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-indigo-600 hover:bg-indigo-500"
+                } px-3 py-2 text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
               >
                 Sign up
               </button>
