@@ -1,6 +1,7 @@
 import { Outlet, Link } from "react-router-dom";
 import { Fragment, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
+import { useClassifier } from "../contexts/ClassifierContext";
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
@@ -19,13 +20,14 @@ function classNames(...classes) {
 
 export default function Layout() {
   const [open, setOpen] = useState(false);
+  const { sizes, colors, categories } = useClassifier();
   const { user } = useUser();
 
   const navigation = {
     categories: [
       {
-        id: "women",
-        name: "Women",
+        id: "categories",
+        name: "Categories",
         featured: [
           {
             name: "New Arrivals",
@@ -44,102 +46,39 @@ export default function Layout() {
               "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.",
           },
         ],
-        sections: [
+        sections: [  
           {
             id: "clothing",
             name: "Clothing",
             items: [
-              { name: "Tops", href: "#" },
-              { name: "Dresses", href: "#" },
-              { name: "Pants", href: "#" },
-              { name: "Denim", href: "#" },
-              { name: "Sweaters", href: "#" },
-              { name: "T-Shirts", href: "#" },
-              { name: "Jackets", href: "#" },
-              { name: "Activewear", href: "#" },
-              { name: "Browse All", href: "#" },
+              { name: "Dresses", href: "/search/Dresses"},
+              { name: "Pants", href: "/search/Pants"},
+              { name: "Sweaters", href: "/search/Sweater"},
+              { name: "T-Shirts", href: "/search/Tshirt"},
+              { name: "Coats", href: "/search/Coat"},
             ],
           },
           {
             id: "accessories",
             name: "Accessories",
             items: [
-              { name: "Watches", href: "#" },
-              { name: "Wallets", href: "#" },
-              { name: "Bags", href: "#" },
-              { name: "Sunglasses", href: "#" },
-              { name: "Hats", href: "#" },
-              { name: "Belts", href: "#" },
+              { name: "Watches", href: "/search/Watch"},
+              { name: "Wallets", href: "/search/Wallet"},
+              { name: "Bags", href: "/search/Bag"},
+              { name: "Sunglasses", href: "/search/Sunglasses"},
+              { name: "Hats", href: "/search/Hat"},
             ],
           },
           {
-            id: "brands",
-            name: "Brands",
+            id: "shoes",
+            name: "Shoes",
             items: [
-              { name: "Full Nelson", href: "#" },
-              { name: "My Way", href: "#" },
-              { name: "Re-Arranged", href: "#" },
-              { name: "Counterfeit", href: "#" },
-              { name: "Significant Other", href: "#" },
-            ],
-          },
-        ],
-      },
-      {
-        id: "men",
-        name: "Men",
-        featured: [
-          {
-            name: "New Arrivals",
-            href: "#",
-            imageSrc:
-              "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-            imageAlt:
-              "Drawstring top with elastic loop closure and textured interior padding.",
-          },
-          {
-            name: "Artwork Tees",
-            href: "#",
-            imageSrc:
-              "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-            imageAlt:
-              "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
-          },
-        ],
-        sections: [
-          {
-            id: "clothing",
-            name: "Clothing",
-            items: [
-              { name: "Tops", href: "#" },
-              { name: "Pants", href: "#" },
-              { name: "Sweaters", href: "#" },
-              { name: "T-Shirts", href: "#" },
-              { name: "Jackets", href: "#" },
-              { name: "Activewear", href: "#" },
-              { name: "Browse All", href: "#" },
-            ],
-          },
-          {
-            id: "accessories",
-            name: "Accessories",
-            items: [
-              { name: "Watches", href: "#" },
-              { name: "Wallets", href: "#" },
-              { name: "Bags", href: "#" },
-              { name: "Sunglasses", href: "#" },
-              { name: "Hats", href: "#" },
-              { name: "Belts", href: "#" },
-            ],
-          },
-          {
-            id: "brands",
-            name: "Brands",
-            items: [
-              { name: "Re-Arranged", href: "#" },
-              { name: "Counterfeit", href: "#" },
-              { name: "Full Nelson", href: "#" },
-              { name: "My Way", href: "#" },
+              { name: "Sneakers", href: "/search/Sneakers"},
+              { name: "Heeled Shoes", href: "/search/Heeled-shoes"},
+              { name: "Sandals", href: "/search/Sandals"},
+              { name: "Casual Shoes", href: "/search/Casual-shoes"},
+              { name: "Boots", href: "/search/Boots"},
+              { name: "Slippers", href: "/search/Slippers"},
             ],
           },
         ],

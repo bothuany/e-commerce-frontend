@@ -24,7 +24,8 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/search" element={<Search />} />
         <Route path="/contact" element={<Contact />} />
-
+        
+        <Route path="/search/:categoryName" element={<Search />} />
         <Route path="/products/:name" element={<ProductDetail />} />
         {user && <Route path="/checkout" element={<Checkout />} />}
         {user && user.user.role === "SELLER" && (

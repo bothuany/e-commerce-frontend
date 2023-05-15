@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Fragment, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useParams } from "react-router-dom";
 import {
   ChevronDownIcon,
   FunnelIcon,
@@ -24,9 +25,14 @@ function Search() {
   const [searchText, setSearchText] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [products, setProducts] = useState([]);
+  const [isCategoryNameEntered, setIsCategoryNameEntered] = useState(false);
   const [query, setQuery] = useState(
     "searchText=&colors=&sizes=&categories=&sortBy="
   );
+
+  const { categoryName } = useParams();
+
+  
 
   const [optionColors, setOptionColors] = useState([
     ...colors.map((color) => ({
@@ -49,6 +55,8 @@ function Search() {
       checked: false,
     })),
   ]);
+
+
   const sortOptions = [
     {
       name: "Price: Low to High",
@@ -63,6 +71,16 @@ function Search() {
       current: false,
     },
   ];
+
+  useEffect(() => {
+    if(categoryName){
+      setIsCategoryNameEntered(true);
+    }else{
+      setIsCategoryNameEntered(false);
+    }
+  },[categoryName])
+  
+
 
   const handleOptionColorsChange = (e) => {
     let index = e.target.id.split("-").pop();
@@ -103,6 +121,23 @@ function Search() {
     let selectedSizes = [];
     let selectedCategories = [];
 
+    if(isCategoryNameEntered){
+       
+       let isTrue =optionCategories.some((category) => {
+          return category.value == categoryName && category.checked;
+      })
+      if(!isTrue){
+        optionCategories.forEach((category, index) => {
+          if (category.value == categoryName) {
+            const updatedOptionCategories = [...optionCategories]
+             updatedOptionCategories[index]= {...category,checked:true}
+
+            setOptionCategories(updatedOptionCategories);
+          }
+        });
+      }
+    }
+
     optionColors.forEach((color) => {
       if (color.checked) {
         selectedColors.push(color.value);
@@ -114,6 +149,7 @@ function Search() {
         selectedSizes.push(size.value);
       }
     });
+    
 
     optionCategories.forEach((category) => {
       if (category.checked) {
@@ -121,6 +157,7 @@ function Search() {
       }
     });
 
+    
     setQuery(
       "searchText=" +
         searchText +
@@ -137,7 +174,7 @@ function Search() {
 
   useEffect(() => {
     getQuery();
-  }, [optionColors, optionSizes, optionCategories, sortBy, searchText]);
+  }, [optionColors, optionSizes, optionCategories, sortBy, searchText, isCategoryNameEntered]);
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -325,7 +362,7 @@ function Search() {
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              New Arrivals
+              {isCategoryNameEntered ? categoryName : "New Arrivals"}
             </h1>
             {/*Search Bar*/}
             <form className="max-w-sm px-4">
@@ -457,7 +494,7 @@ function Search() {
                           </Disclosure.Button>
                         </h3>
                         <Disclosure.Panel className="pt-6">
-                          <div className="space-y-4">
+                          <div className="space-y-4 h-40 overflow-y-auto">
                             {section.options.map((option, optionIdx) => (
                               <div
                                 key={option.value}
