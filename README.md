@@ -1,5 +1,5 @@
-Live Link: https://wearwell-shopping.vercel.app/
-API Repository: https://github.com/bothuany/e-commerce-api
+## Live Link: https://wearwell-shopping.vercel.app/
+## API Repository: https://github.com/bothuany/e-commerce-api
 
 # Getting Started with Create React App
 
