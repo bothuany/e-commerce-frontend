@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Alert from "../components/Alert";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import dir from "../dir.json";
+import dir from "../config/dir.json";
 
 function Login() {
   const navigate = useNavigate();

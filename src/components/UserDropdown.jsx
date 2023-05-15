@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useUser } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -6,6 +6,8 @@ function UserDropdown() {
   const { user, setUser } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -15,6 +17,20 @@ function UserDropdown() {
     setUser(null);
     navigate("/");
   };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsModalOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       <div className="relative">
@@ -28,10 +44,12 @@ function UserDropdown() {
         {/* Dropdown */}
         {isModalOpen && user ? (
           <div
+            ref={dropdownRef}
             id="userDropdown"
             className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 absolute right-0 mt-2"
           >
-            <div className="px-4 py-3 text-sm text-gray-900 ">
+            {/* Dropdown content */}
+            <div className="px-4 py-3 text-sm text-gray-900">
               <div>{user.user.name}</div>
               <div className="font-medium truncate">{user.user.email}</div>
               <div className="font-medium truncate text-purple-800">
@@ -39,7 +57,7 @@ function UserDropdown() {
               </div>
             </div>
             <ul
-              className="py-2 text-sm text-gray-700 "
+              className="py-2 text-sm text-gray-700"
               aria-labelledby="avatarButton"
             >
               <li>
@@ -53,7 +71,7 @@ function UserDropdown() {
                 </a>
               </li>
               <li>
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
+                <a href="#" className="block px-4 py-2 hover:bg-gray-100">
                   Earnings
                 </a>
               </li>

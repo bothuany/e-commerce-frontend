@@ -10,8 +10,11 @@ import Contact from "./pages/Contact";
 import Sales from "./pages/Sales";
 import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
+import { useUser } from "./contexts/UserContext";
+import MyProducts from "./pages/MyProducts";
 
 function App() {
+  const { user } = useUser();
   return (
     <Routes>
       <Route element={<Layout />}>
@@ -21,9 +24,14 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/search" element={<Search />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/sales" element={<Sales />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/products/:name" element={<ProductDetail />} />
+        {user && user.user.role === "SELLER" && (
+          <Route path="/sales" element={<Sales />} />
+        )}
+        {user && user.user.role === "SELLER" && (
+          <Route path="/my-products" element={<MyProducts />} />
+        )}
       </Route>
     </Routes>
   );

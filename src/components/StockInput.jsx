@@ -6,7 +6,8 @@ function StockInput({ value, colors, sizes, onChange, stocks, setStocks }) {
   const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
-    onChange({ color, size, quantity });
+    if (quantity < 0) setQuantity(0);
+    onChange({ colorID: color, sizeID: size, quantity });
   }, [color, size, quantity]);
 
   const onRemove = () => {
@@ -26,6 +27,7 @@ function StockInput({ value, colors, sizes, onChange, stocks, setStocks }) {
         <select
           id="size"
           onChange={(e) => setSize(e.target.value)}
+          value={value.size ? value.size.id : value.sizeID}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
         >
           <option value="">Select size</option>
@@ -46,6 +48,7 @@ function StockInput({ value, colors, sizes, onChange, stocks, setStocks }) {
         <select
           id="color"
           onChange={(e) => setColor(e.target.value)}
+          value={value.color ? value.color.id : value.colorID}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
         >
           <option value="">Select color</option>
@@ -68,6 +71,7 @@ function StockInput({ value, colors, sizes, onChange, stocks, setStocks }) {
           onChange={(e) => setQuantity(e.target.value)}
           name="quantity"
           id="quantity"
+          value={value.quantity}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
           placeholder="200"
           required=""
