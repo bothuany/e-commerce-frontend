@@ -27,7 +27,7 @@ const Footer = () => {
             <span className="inline-flex mt-6 w-full justify-center md:justify-start md:w-auto">
               {/* GitHub */}
               <a
-                href="#"
+                href="https://github.com/bothuany/e-commerce-frontend"
                 className="fa-brands fa-github fa-lg ml-3 text-gray-300"
               >
                 <span className="sr-only">GitHub</span>
