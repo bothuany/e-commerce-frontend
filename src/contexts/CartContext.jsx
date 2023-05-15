@@ -7,13 +7,10 @@ const CartProvider = ({ children }) => {
 
   const addToCart = (newItem) => {
     let info = isProductWithFeaturesAlreadyAdded(newItem);
-    console.log(info);
 
     if (!info) {
-      console.log("aaaa");
       setCartItems([...cartItems, newItem]);
     } else {
-      console.log("bbbb");
       cartItems.map((item) => {
         if (item.id == info) {
           item.quantity += 1;

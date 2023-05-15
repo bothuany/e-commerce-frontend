@@ -1,55 +1,13 @@
 import { useEffect, useState } from "react";
 import { RadioGroup } from "@headlessui/react";
 import { useCart } from "../contexts/CartContext";
+import { useClassifier } from "../contexts/ClassifierContext";
 import { useParams } from "react-router-dom";
 
 import Alert from "../components/Alert";
 import axios from "axios";
 import dir from "../config/dir.json";
 import colorList from "../config/colors.json";
-/*
-
-const product = {
-  id: 3,
-  name: "Basic Tee 6-Pack",
-  price: 192,
-  href: "#",
-  companyName: "Koton",
-  breadcrumbs: [
-    { id: 1, name: "Men", href: "#" },
-    { id: 2, name: "Clothing", href: "#" },
-  ],
-  images: [
-    "https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg",
-    "https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg",
-  ],
-  colors: [
-    { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
-    { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
-    { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
-  ],
-  sizes: [
-    { name: "XXS", inStock: false },
-    { name: "XS", inStock: true },
-    { name: "S", inStock: true },
-    { name: "M", inStock: true },
-    { name: "L", inStock: true },
-    { name: "XL", inStock: true },
-    { name: "2XL", inStock: true },
-    { name: "3XL", inStock: true },
-  ],
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-  highlights: [
-    "Hand cut and sewn locally",
-    "Dyed with our proprietary colors",
-    "Pre-washed & pre-shrunk",
-    "Ultra-soft 100% cotton",
-  ],
-  details:
-    'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-};
-*/
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -57,11 +15,21 @@ function classNames(...classes) {
 
 export default function ProductDetail() {
   const { addToCart } = useCart();
+  const { colors: defaultColors, sizes: defaultSizes } = useClassifier();
   const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertTitle, setAlertTitle] = useState("Success!");
+  const [alertText, setAlertText] = useState(
+    "Chosen product added to your cart."
+  );
   const { name } = useParams();
+
   const [product, setProduct] = useState(null);
   const [colors, setColors] = useState([]);
   const [sizes, setSizes] = useState([]);
+  const [stocks, setStocks] = useState([]);
+  const [selectedColor, setSelectedColor] = useState({ name: "" });
+  const [selectedSize, setSelectedSize] = useState({ name: "" });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,6 +40,8 @@ export default function ProductDetail() {
         const responseData = response.data;
 
         setProduct(responseData.product);
+        setStocks(responseData.stocks);
+
         setColors(
           responseData.stocks.map((stock) => {
             if (stock.quantity > 0) {
@@ -81,6 +51,8 @@ export default function ProductDetail() {
             }
           })
         );
+        setSelectedColor({ ...responseData.stocks[0].color });
+        setSelectedSize({ id: 0 });
         setSizes(
           responseData.stocks.map((stock) => {
             if (stock.quantity > 0) {
@@ -96,19 +68,65 @@ export default function ProductDetail() {
     };
 
     fetchData();
-  }, [name]);
+  }, [name, defaultColors, defaultSizes]);
 
-  const [selectedColor, setSelectedColor] = useState(colors[0] || { name: "" });
-  const [selectedSize, setSelectedSize] = useState(sizes[0] || { name: "" });
+  const getStockInfos = (colorID, sizeID) => {
+    let stockID = null;
+    let quantity = 0;
+
+    stocks.some((stock) => {
+      if (stock.color.id === colorID && stock.size.id === sizeID) {
+        stockID = stock.id;
+        quantity = stock.quantity;
+        return true;
+      }
+    });
+
+    return { stockID, quantity };
+  };
+
+  const isColorExists = (colorID) => {
+    let exists = false;
+    colors.some((color) => {
+      if (color.id === colorID) {
+        exists = true;
+        return true;
+      }
+    });
+    return exists;
+  };
+
+  const isSizeExists = (sizeID) => {
+    let exists = false;
+    sizes.some((size) => {
+      if (size.id === sizeID) {
+        exists = true;
+        return true;
+      }
+    });
+    return exists;
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    let { stockID: selectedStockID, quantity } = getStockInfos(
+      selectedColor.id,
+      selectedSize.id
+    );
 
+    if (!selectedStockID) {
+      setAlertText("Please select a color and a size.");
+      setAlertType("error");
+      setAlertTitle("Error!");
+      setShowAlert(true);
+      return;
+    }
     addToCart({
       ...product,
       quantity: 1,
       color: selectedColor.name,
       size: selectedSize.name,
+      stockID: selectedStockID,
     });
 
     setShowAlert(true);
@@ -185,33 +203,37 @@ export default function ProductDetail() {
                       Choose a color
                     </RadioGroup.Label>
                     <div className="flex  items-center space-x-3">
-                      {colors.map((color) => (
-                        <RadioGroup.Option
-                          key={color.name}
-                          value={color}
-                          style={{
-                            backgroundColor:
-                              colorList[color.name.toLowerCase()],
-                          }}
-                          className={({ active, checked }) =>
-                            classNames(
-                              active && checked ? "ring ring-offset-1" : "",
-                              !active && checked ? "ring-2" : "",
-                              "relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none"
-                            )
-                          }
-                        >
-                          <RadioGroup.Label as="span" className="sr-only">
-                            {color.name}
-                          </RadioGroup.Label>
-                          <span
-                            aria-hidden="true"
-                            className={classNames(
-                              "h-8 w-8 rounded-full border border-black border-opacity-10"
-                            )}
-                          />
-                        </RadioGroup.Option>
-                      ))}
+                      {defaultColors.map((color) => {
+                        if (isColorExists(color.id)) {
+                          return (
+                            <RadioGroup.Option
+                              key={color.name}
+                              value={color}
+                              style={{
+                                backgroundColor:
+                                  colorList[color.name.toLowerCase()],
+                              }}
+                              className={({ active, checked }) =>
+                                classNames(
+                                  active && checked ? "ring ring-offset-1" : "",
+                                  !active && checked ? "ring-2" : "",
+                                  "relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none"
+                                )
+                              }
+                            >
+                              <RadioGroup.Label as="span" className="sr-only">
+                                {color.name}
+                              </RadioGroup.Label>
+                              <span
+                                aria-hidden="true"
+                                className={classNames(
+                                  "h-8 w-8 rounded-full border border-black border-opacity-10"
+                                )}
+                              />
+                            </RadioGroup.Option>
+                          );
+                        }
+                      })}
                     </div>
                   </RadioGroup>
                 </div>
@@ -231,69 +253,68 @@ export default function ProductDetail() {
                       Choose a size
                     </RadioGroup.Label>
                     <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                      {sizes.map((size) => (
-                        <RadioGroup.Option
-                          key={size.name}
-                          value={size}
-                          disabled={!size.inStock}
-                          className={({ active }) =>
-                            classNames(
-                              size.inStock
-                                ? "cursor-pointer bg-white text-gray-900 shadow-sm"
-                                : "cursor-not-allowed bg-gray-50 text-gray-200",
-                              active ? "ring-2 ring-indigo-500" : "",
-                              "group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6"
-                            )
-                          }
-                        >
-                          {({ active, checked }) => (
-                            <>
-                              <RadioGroup.Label as="span">
-                                {size.name}
-                              </RadioGroup.Label>
-                              {size.inStock ? (
-                                <span
-                                  className={classNames(
-                                    active ? "border" : "border-2",
-                                    checked
-                                      ? "border-indigo-500"
-                                      : "border-transparent",
-                                    "pointer-events-none absolute -inset-px rounded-md"
-                                  )}
-                                  aria-hidden="true"
-                                />
-                              ) : (
-                                <span
-                                  aria-hidden="true"
-                                  className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                                >
-                                  <svg
-                                    className="absolute inset-0 h-full w-full stroke-2 text-gray-200"
-                                    viewBox="0 0 100 100"
-                                    preserveAspectRatio="none"
-                                    stroke="currentColor"
-                                  >
-                                    <line
-                                      x1={0}
-                                      y1={100}
-                                      x2={100}
-                                      y2={0}
-                                      vectorEffect="non-scaling-stroke"
+                      {defaultSizes.map((size) => {
+                        if (isSizeExists(size.id)) {
+                          return (
+                            <RadioGroup.Option
+                              key={size.name}
+                              value={size}
+                              disabled={
+                                selectedColor
+                                  ? getStockInfos(selectedColor.id, size.id)
+                                      .quantity < 0
+                                  : true
+                              }
+                              className={({ active }) =>
+                                classNames(
+                                  (
+                                    selectedColor
+                                      ? getStockInfos(selectedColor.id, size.id)
+                                          .quantity > 0
+                                      : false
+                                  )
+                                    ? "cursor-pointer bg-white text-gray-900 shadow-sm"
+                                    : "cursor-not-allowed bg-gray-50 text-gray-200",
+                                  active ? "ring-2 ring-violet-500" : "",
+                                  "group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6"
+                                )
+                              }
+                            >
+                              {({ active, checked }) => (
+                                <>
+                                  <RadioGroup.Label as="span">
+                                    {size.name}
+                                  </RadioGroup.Label>
+                                  {size.inStock ? (
+                                    <span
+                                      className={classNames(
+                                        active ? "border" : "border-2",
+                                        checked
+                                          ? "border-violet-500"
+                                          : "border-transparent",
+                                        "pointer-events-none absolute -inset-px rounded-md"
+                                      )}
+                                      aria-hidden="true"
                                     />
-                                  </svg>
-                                </span>
+                                  ) : (
+                                    <span
+                                      aria-hidden="true"
+                                      className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
+                                    ></span>
+                                  )}
+                                </>
                               )}
-                            </>
-                          )}
-                        </RadioGroup.Option>
-                      ))}
+                            </RadioGroup.Option>
+                          );
+                        }
+                      })}
                     </div>
                   </RadioGroup>
                 </div>
 
                 <button
                   type="submit"
-                  className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-violet-600 px-8 py-3 text-base font-medium text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
                 >
                   Add to bag
                 </button>
@@ -341,9 +362,9 @@ export default function ProductDetail() {
       ) : null}
       {showAlert ? (
         <Alert
-          type="success"
-          title="Added"
-          text="Chosen product added to your cart."
+          type={alertType}
+          title={alertTitle}
+          text={alertText}
           showAlert={showAlert}
           setShowAlert={setShowAlert}
         />

@@ -12,6 +12,7 @@ import {
 import Products from "../components/Products";
 import axios from "axios";
 import dir from "../config/dir.json";
+import { useClassifier } from "../contexts/ClassifierContext";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -19,9 +20,7 @@ function classNames(...classes) {
 
 function Search() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [sizes, setSizes] = useState([]);
-  const [colors, setColors] = useState([]);
+  const { sizes, colors, categories } = useClassifier();
   const [searchText, setSearchText] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [products, setProducts] = useState([]);
@@ -134,7 +133,6 @@ function Search() {
         "&sortBy=" +
         sortBy
     );
-    console.log(query);
   };
 
   useEffect(() => {
@@ -189,27 +187,6 @@ function Search() {
       })),
     ]);
   }, [categories]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const { data } = await axios.get(dir.api + "/api/categories");
-      setCategories(data);
-    };
-
-    fetchCategories();
-
-    const fetchSizes = async () => {
-      const { data } = await axios.get(dir.api + "/api/sizes");
-      setSizes(data);
-    };
-    fetchSizes();
-
-    const fetchColors = async () => {
-      const { data } = await axios.get(dir.api + "/api/colors");
-      setColors(data);
-    };
-    fetchColors();
-  }, []);
 
   const filters = [
     {
@@ -322,7 +299,7 @@ function Search() {
                                       onChange={handleChange}
                                       type="checkbox"
                                       defaultChecked={option.checked}
-                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                      className="h-4 w-4 rounded border-gray-300 text-violet-600 focus:ring-violet-500"
                                     />
                                     <label
                                       htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
@@ -372,7 +349,7 @@ function Search() {
                   placeholder="Search"
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
-                  className="w-full py-3 pl-12 pr-24 text-gray-500 border rounded-md outline-none bg-gray-50 focus:bg-white focus:border-indigo-600"
+                  className="w-full py-3 pl-12 pr-24 text-gray-500 border rounded-md outline-none bg-gray-50 focus:bg-white focus:border-violet-600"
                 />
               </div>
             </form>
@@ -404,6 +381,7 @@ function Search() {
                           {({ active }) => (
                             <a
                               href={option.href}
+                              onClick={() => setSortBy(option.value)}
                               className={classNames(
                                 option.current
                                   ? "font-medium text-gray-900"
@@ -492,7 +470,7 @@ function Search() {
                                   onChange={handleChange}
                                   type="checkbox"
                                   defaultChecked={option.checked}
-                                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                  className="h-4 w-4 rounded border-gray-300 text-violet-600 focus:ring-violet-500"
                                 />
                                 <label
                                   htmlFor={`filter-${section.id}-${optionIdx}`}

@@ -62,7 +62,7 @@ function CartProduct({ product, index }) {
           </span>
           {/* ::::remove */}
           <button
-            className="text-sm text-indigo-500 font-semibold hover:underline hover:text-indigo-700"
+            className="text-sm text-violet-500 font-semibold hover:underline hover:text-violet-700"
             onClick={() => {
               removeFromCart(product.id);
             }}

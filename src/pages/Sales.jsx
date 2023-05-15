@@ -6,6 +6,7 @@ import HighlightsInput from "../components/HighlightsInput";
 import StocksInput from "../components/StocksInput";
 import ImagesInput from "../components/ImagesInput";
 import { useUser } from "../contexts/UserContext";
+import { useClassifier } from "../contexts/ClassifierContext";
 
 function Sales() {
   const [productName, setProductName] = useState("");
@@ -15,10 +16,6 @@ function Sales() {
   const [price, setPrice] = useState(0);
   const [images, setImages] = useState([]);
   const [category, setCategory] = useState("");
-
-  const [categories, setCategories] = useState([]);
-  const [sizes, setSizes] = useState([]);
-  const [colors, setColors] = useState([]);
 
   const [stocks, setStocks] = useState([
     { id: 1, colorID: "", sizeID: "", quantity: 0 },
@@ -33,27 +30,7 @@ function Sales() {
   );
 
   const { user } = useUser();
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const { data } = await axios.get(dir.api + "/api/categories");
-      setCategories(data);
-    };
-
-    fetchCategories();
-
-    const fetchSizes = async () => {
-      const { data } = await axios.get(dir.api + "/api/sizes");
-      setSizes(data);
-    };
-    fetchSizes();
-
-    const fetchColors = async () => {
-      const { data } = await axios.get(dir.api + "/api/colors");
-      setColors(data);
-    };
-    fetchColors();
-  }, []);
+  const { sizes, colors, categories } = useClassifier();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
