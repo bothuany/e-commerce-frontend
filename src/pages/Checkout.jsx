@@ -1,19 +1,72 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CheckBadgeIcon,
   InformationCircleIcon,
   LockClosedIcon,
 } from "@heroicons/react/24/outline";
 import { useCart } from "../contexts/CartContext";
+import axios from "axios";
+import { useUser } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
+import dir from "../config/dir.json";
+import Alert from "../components/Alert";
+import { useLocation } from "react-router-dom";
 
 const Checkout = () => {
   const { cartItems } = useCart();
+  const { user } = useUser();
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const { orderID } = state;
+  let idGenerator = 1;
+  const [showAlert, setShowAlert] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertTitle, setAlertTitle] = useState("Success!");
+  const [alertText, setAlertText] = useState("Payment successful!");
+  const [paymentMethod, setPaymentMethod] = useState("Visa");
 
   let totalPrice = cartItems.reduce(
     (total, product) => total + product.price * product.quantity,
     0
   );
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("submit");
+
+    setIsLoading(true);
+
+    const payment = {
+      paymentMethod,
+      amount: totalPrice,
+      orderID: orderID,
+    };
+
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    console.log(dir.api + "/api/payments/pay", payment, config);
+    await axios
+      .post(dir.api + "/api/payments/pay", payment, config)
+      .then((res) => {
+        setAlertType("success");
+        setAlertTitle("Success!");
+        setAlertText("Payment successful!");
+        setShowAlert(true);
+      })
+      .catch((err) => {
+        setAlertType("error");
+        setAlertTitle("Error!");
+        setAlertText("Something went wrong. Please try again.");
+        setShowAlert(true);
+      });
+    setIsLoading(false);
+  };
   return (
     <div className="relative mx-auto w-full max-w-7xl bg-white">
       <div className="grid grid-cols-10">
@@ -23,11 +76,14 @@ const Checkout = () => {
             {/* ::Title */}
             <h1 className="relative text-2xl sm:text-3xl text-gray-700 font-medium">
               Secure Checkout
-              <span className="mt-2 w-10 sm:w-20 h-1 block bg-indigo-600" />
+              <span className="mt-2 w-10 sm:w-20 h-1 block bg-violet-600" />
             </h1>
 
             {/* ::Checkout Form */}
-            <form action="" className="mt-10 flex flex-col space-y-4">
+            <form
+              onSubmit={handleSubmit}
+              className="mt-10 flex flex-col space-y-4"
+            >
               {/* :::Email address */}
               <div>
                 {/* ::::label */}
@@ -43,7 +99,7 @@ const Checkout = () => {
                   id="email"
                   name="email"
                   placeholder="myaddress@example.com"
-                  className="form-input mt-1 w-full block shadow-sm rounded border-gray-300 bg-gray-50 text-sm placeholder-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="form-input mt-1 w-full block shadow-sm rounded border-gray-300 bg-gray-50 text-sm placeholder-gray-300 focus:border-violet-500 focus:ring-1 focus:ring-violet-500"
                 />
               </div>
               {/* :::Card number */}
@@ -61,7 +117,7 @@ const Checkout = () => {
                   id="card-number"
                   name="card-number"
                   placeholder="1234-5678-XXXX-XXXX"
-                  className="form-input pr-10 w-full block shadow-sm rounded border-gray-300 bg-gray-50 text-sm placeholder-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="form-input pr-10 w-full block shadow-sm rounded border-gray-300 bg-gray-50 text-sm placeholder-gray-300 focus:border-violet-500 focus:ring-1 focus:ring-violet-500"
                 />
                 {/* ::::visa logo */}
                 <img
@@ -85,7 +141,7 @@ const Checkout = () => {
                     <select
                       name="month"
                       id="month"
-                      className={`form-select shadow-sm rounded border-gray-300 bg-gray-50 text-sm cursor-pointer focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500`}
+                      className={`form-select shadow-sm rounded border-gray-300 bg-gray-50 text-sm cursor-pointer focus:border-violet-500 focus:ring-1 focus:ring-violet-500`}
                     >
                       <option value="">Month</option>
                     </select>
@@ -98,7 +154,7 @@ const Checkout = () => {
                     <select
                       name="year"
                       id="year"
-                      className={`form-select shadow-sm rounded border-gray-300 bg-gray-50 text-sm cursor-pointer focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500`}
+                      className={`form-select shadow-sm rounded border-gray-300 bg-gray-50 text-sm cursor-pointer focus:border-violet-500 focus:ring-1 focus:ring-violet-500`}
                     >
                       <option value="">Year</option>
                     </select>
@@ -113,9 +169,9 @@ const Checkout = () => {
                       id="security-code"
                       name="security-code"
                       placeholder="Security code"
-                      className="form-input w-36 block shadow-sm rounded border-gray-300 bg-gray-50 text-sm placeholder-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      className="form-input w-36 block shadow-sm rounded border-gray-300 bg-gray-50 text-sm placeholder-gray-300 focus:border-violet-500 focus:ring-1 focus:ring-violet-500"
                     />
-                    <button className="absolute top-1/2 -right-6 inline-flex justify-center items-center text-gray-400 hover:text-indigo-600 transform -translate-y-1/2">
+                    <button className="absolute top-1/2 -right-6 inline-flex justify-center items-center text-gray-400 hover:text-violet-600 transform -translate-y-1/2">
                       <InformationCircleIcon className="w-5 h-5" />
                     </button>
                   </div>
@@ -133,7 +189,7 @@ const Checkout = () => {
                   id="card-name"
                   name="card-name"
                   placeholder="Name on the card"
-                  className="form-input mt-1 w-full block shadow-sm rounded border-gray-300 bg-gray-50 text-sm placeholder-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="form-input mt-1 w-full block shadow-sm rounded border-gray-300 bg-gray-50 text-sm placeholder-gray-300 focus:border-violet-500 focus:ring-1 focus:ring-violet-500"
                 />
               </div>
             </form>
@@ -143,7 +199,7 @@ const Checkout = () => {
               By placing this order you agree to the{" "}
               <a
                 href="#link"
-                className="text-indigo-400 underline hover:text-indigo-600 whitespace-nowrap"
+                className="text-violet-400 underline hover:text-violet-600 whitespace-nowrap"
               >
                 Terms and Conditions
               </a>
@@ -152,7 +208,8 @@ const Checkout = () => {
             {/* ::Submit Button */}
             <button
               type="submit"
-              className="mt-4 py-2.5 px-4 w-full inline-flex justify-center items-center rounded bg-indigo-600 text-base sm:text-lg text-white text-opacity-80 font-semibold tracking-wide hover:text-opacity-100"
+              onClick={handleSubmit}
+              className="mt-4 py-2.5 px-4 w-full inline-flex justify-center items-center rounded bg-violet-600 text-base sm:text-lg text-white text-opacity-80 font-semibold tracking-wide hover:text-opacity-100"
             >
               <LockClosedIcon className="mr-3 w-5 h-5" />
               Place Order
@@ -172,7 +229,7 @@ const Checkout = () => {
               alt=""
               className="absolute inset-0 w-full h-full"
             />
-            <div className="absolute inset-0 w-full h-full bg-gradient-to-t from-indigo-800 to-indigo-400 opacity-75" />
+            <div className="absolute inset-0 w-full h-full bg-gradient-to-t from-violet-800 to-violet-400 opacity-75" />
           </div>
 
           {/* ::Order Summary */}
@@ -180,7 +237,10 @@ const Checkout = () => {
             {/* :::Item list */}
             <ul className="space-y-5">
               {cartItems.map((item) => (
-                <li key={item.id} className="flex justify-between">
+                <li
+                  key={item.id + idGenerator++}
+                  className="flex justify-between"
+                >
                   {/* ::::item infos */}
                   <div className="inline-flex">
                     <img src={item.images[0]} alt="" className="max-h-16" />
@@ -226,6 +286,15 @@ const Checkout = () => {
           </div>
         </div>
       </div>
+      {showAlert ? (
+        <Alert
+          type={alertType}
+          title={alertTitle}
+          text={alertText}
+          showAlert={showAlert}
+          setShowAlert={setShowAlert}
+        />
+      ) : null}
     </div>
   );
 };

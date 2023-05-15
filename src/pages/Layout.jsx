@@ -212,7 +212,7 @@ export default function Layout() {
                             className={({ selected }) =>
                               classNames(
                                 selected
-                                  ? "border-indigo-600 text-indigo-600"
+                                  ? "border-violet-600 text-violet-600"
                                   : "border-transparent text-gray-900",
                                 "flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium"
                               )
@@ -329,7 +329,7 @@ export default function Layout() {
         </Transition.Root>
 
         <header className="relative bg-white">
-          <p className="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8"></p>
+          <p className="flex h-10 items-center justify-center bg-violet-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8"></p>
 
           <nav
             aria-label="Top"
@@ -369,7 +369,7 @@ export default function Layout() {
                               <Popover.Button
                                 className={classNames(
                                   open
-                                    ? "border-indigo-600 text-indigo-600"
+                                    ? "border-violet-600 text-violet-600"
                                     : "border-transparent text-gray-700 hover:text-gray-800",
                                   "relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out"
                                 )}
