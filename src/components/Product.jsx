@@ -20,9 +20,7 @@ function Product({ product }) {
               {product.name}
             </Link>
           </h3>
-          <p className="mt-1 text-sm text-gray-500">
-            {product.seller.companyName}
-          </p>
+          <p className="mt-1 text-sm text-gray-500">{product.companyName}</p>
         </div>
         <p className="text-sm font-medium text-gray-900">{`$${product.price.toFixed(
           2

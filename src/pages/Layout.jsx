@@ -150,6 +150,11 @@ export default function Layout() {
       { name: "Contact", href: "/contact" },
       // Add "Sales" page if user.role === "seller"
       user && user.user.role == "SELLER" && { name: "Sales", href: "/sales" },
+      user &&
+        user.user.role == "SELLER" && {
+          name: "My Products",
+          href: "/my-products",
+        },
     ].filter(Boolean),
   };
 

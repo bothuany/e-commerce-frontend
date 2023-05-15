@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Fragment, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -10,66 +10,225 @@ import {
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
 import Products from "../components/Products";
+import axios from "axios";
+import dir from "../config/dir.json";
 
-const sortOptions = [
-  { name: "Most Popular", href: "#", current: true },
-  { name: "Best Rating", href: "#", current: false },
-  { name: "Newest", href: "#", current: false },
-  { name: "Price: Low to High", href: "#", current: false },
-  { name: "Price: High to Low", href: "#", current: false },
-];
-
-const subCategories = [
-  { name: "Totes", href: "#" },
-  { name: "Backpacks", href: "#" },
-  { name: "Travel Bags", href: "#" },
-  { name: "Hip Bags", href: "#" },
-  { name: "Laptop Sleeves", href: "#" },
-];
-const filters = [
-  {
-    id: "color",
-    name: "Color",
-    options: [
-      { value: "white", label: "White", checked: false },
-      { value: "beige", label: "Beige", checked: false },
-      { value: "blue", label: "Blue", checked: true },
-      { value: "brown", label: "Brown", checked: false },
-      { value: "green", label: "Green", checked: false },
-      { value: "purple", label: "Purple", checked: false },
-    ],
-  },
-  {
-    id: "category",
-    name: "Category",
-    options: [
-      { value: "new-arrivals", label: "New Arrivals", checked: false },
-      { value: "sale", label: "Sale", checked: false },
-      { value: "travel", label: "Travel", checked: true },
-      { value: "organization", label: "Organization", checked: false },
-      { value: "accessories", label: "Accessories", checked: false },
-    ],
-  },
-  {
-    id: "size",
-    name: "Size",
-    options: [
-      { value: "xxs", label: "XXS", checked: false },
-      { value: "xs", label: "XS", checked: false },
-      { value: "s", label: "S", checked: false },
-      { value: "m", label: "M", checked: false },
-      { value: "l", label: "L", checked: false },
-      { value: "xl", label: "XL", checked: false },
-      { value: "xxl", label: "XXL", checked: true },
-    ],
-  },
-];
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 function Search() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [sizes, setSizes] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [products, setProducts] = useState([]);
+  const [query, setQuery] = useState(
+    "searchText=&colors=&sizes=&categories=&sortBy="
+  );
+
+  const [optionColors, setOptionColors] = useState([
+    ...colors.map((color) => ({
+      value: color.name,
+      label: color.name,
+      checked: false,
+    })),
+  ]);
+  const [optionSizes, setOptionSizes] = useState([
+    ...sizes.map((size) => ({
+      value: size.name,
+      label: size.name,
+      checked: false,
+    })),
+  ]);
+  const [optionCategories, setOptionCategories] = useState([
+    ...categories.map((category) => ({
+      value: category.name,
+      label: category.name,
+      checked: false,
+    })),
+  ]);
+  const sortOptions = [
+    {
+      name: "Price: Low to High",
+      value: "LowToHigh",
+      href: "#",
+      current: false,
+    },
+    {
+      name: "Price: High to Low",
+      value: "HighToLow",
+      href: "#",
+      current: false,
+    },
+  ];
+
+  const handleOptionColorsChange = (e) => {
+    let index = e.target.id.split("-").pop();
+    const updatedOptionColors = [...optionColors];
+
+    updatedOptionColors[index].checked = !updatedOptionColors[index].checked;
+    setOptionColors(updatedOptionColors);
+  };
+
+  const handleOptionSizesChange = (e) => {
+    let index = e.target.id.split("-").pop();
+    const updatedOptionSizes = [...optionSizes];
+
+    updatedOptionSizes[index].checked = !updatedOptionSizes[index].checked;
+    setOptionSizes(updatedOptionSizes);
+  };
+
+  const handleOptionCategoriesChange = (e) => {
+    let index = e.target.id.split("-").pop();
+    const updatedOptionCategories = [...optionCategories];
+
+    updatedOptionCategories[index].checked =
+      !updatedOptionCategories[index].checked;
+    setOptionCategories(updatedOptionCategories);
+  };
+
+  const handleChange = (e) => {
+    if (e.target.name === "color[]") {
+      handleOptionColorsChange(e);
+    } else if (e.target.name === "size[]") {
+      handleOptionSizesChange(e);
+    } else if (e.target.name === "category[]") {
+      handleOptionCategoriesChange(e);
+    }
+  };
+  const getQuery = (e) => {
+    let selectedColors = [];
+    let selectedSizes = [];
+    let selectedCategories = [];
+
+    optionColors.forEach((color) => {
+      if (color.checked) {
+        selectedColors.push(color.value);
+      }
+    });
+
+    optionSizes.forEach((size) => {
+      if (size.checked) {
+        selectedSizes.push(size.value);
+      }
+    });
+
+    optionCategories.forEach((category) => {
+      if (category.checked) {
+        selectedCategories.push(category.value);
+      }
+    });
+
+    setQuery(
+      "searchText=" +
+        searchText +
+        "&colors=" +
+        selectedColors.join(",") +
+        "&sizes=" +
+        selectedSizes.join(",") +
+        "&categories=" +
+        selectedCategories.join(",") +
+        "&sortBy=" +
+        sortBy
+    );
+    console.log(query);
+  };
+
+  useEffect(() => {
+    getQuery();
+  }, [optionColors, optionSizes, optionCategories, sortBy, searchText]);
+
+  useEffect(() => {
+    const handleSearch = async () => {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      await axios
+        .get(dir.api + "/api/products/search/?" + query, config)
+        .then((res) => {
+          setProducts(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    handleSearch();
+  }, [query]);
+
+  useEffect(() => {
+    setOptionColors([
+      ...colors.map((color) => ({
+        value: color.name,
+        label: color.name,
+        checked: false,
+      })),
+    ]);
+  }, [colors]);
+
+  useEffect(() => {
+    setOptionSizes([
+      ...sizes.map((size) => ({
+        value: size.name,
+        label: size.name,
+        checked: false,
+      })),
+    ]);
+  }, [sizes]);
+
+  useEffect(() => {
+    setOptionCategories([
+      ...categories.map((category) => ({
+        value: category.name,
+        label: category.name,
+        checked: false,
+      })),
+    ]);
+  }, [categories]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const { data } = await axios.get(dir.api + "/api/categories");
+      setCategories(data);
+    };
+
+    fetchCategories();
+
+    const fetchSizes = async () => {
+      const { data } = await axios.get(dir.api + "/api/sizes");
+      setSizes(data);
+    };
+    fetchSizes();
+
+    const fetchColors = async () => {
+      const { data } = await axios.get(dir.api + "/api/colors");
+      setColors(data);
+    };
+    fetchColors();
+  }, []);
+
+  const filters = [
+    {
+      id: "color",
+      name: "Color",
+      options: optionColors,
+    },
+    {
+      id: "category",
+      name: "Category",
+      options: optionCategories,
+    },
+    {
+      id: "size",
+      name: "Size",
+      options: optionSizes,
+    },
+  ];
+
   return (
     <div className="bg-white">
       <div>
@@ -120,18 +279,6 @@ function Search() {
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
-                    <ul
-                      role="list"
-                      className="px-2 py-3 font-medium text-gray-900"
-                    >
-                      {subCategories.map((category) => (
-                        <li key={category.name}>
-                          <a href={category.href} className="block px-2 py-3">
-                            {category.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
 
                     {filters.map((section) => (
                       <Disclosure
@@ -172,6 +319,7 @@ function Search() {
                                       id={`filter-mobile-${section.id}-${optionIdx}`}
                                       name={`${section.id}[]`}
                                       defaultValue={option.value}
+                                      onChange={handleChange}
                                       type="checkbox"
                                       defaultChecked={option.checked}
                                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
@@ -222,6 +370,8 @@ function Search() {
                 <input
                   type="text"
                   placeholder="Search"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
                   className="w-full py-3 pl-12 pr-24 text-gray-500 border rounded-md outline-none bg-gray-50 focus:bg-white focus:border-indigo-600"
                 />
               </div>
@@ -299,16 +449,6 @@ function Search() {
               {/* Filters */}
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
-                <ul
-                  role="list"
-                  className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
-                >
-                  {subCategories.map((category) => (
-                    <li key={category.name}>
-                      <a href={category.href}>{category.name}</a>
-                    </li>
-                  ))}
-                </ul>
 
                 {filters.map((section) => (
                   <Disclosure
@@ -349,6 +489,7 @@ function Search() {
                                   id={`filter-${section.id}-${optionIdx}`}
                                   name={`${section.id}[]`}
                                   defaultValue={option.value}
+                                  onChange={handleChange}
                                   type="checkbox"
                                   defaultChecked={option.checked}
                                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
@@ -373,7 +514,7 @@ function Search() {
               <div className="lg:col-span-3">
                 {
                   /* Your content */
-                  <Products />
+                  <Products products={products} />
                 }
               </div>
             </div>

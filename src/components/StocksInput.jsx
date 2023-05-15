@@ -10,8 +10,8 @@ function StocksInput({ colors, sizes, stocks, setStocks }) {
 
     const newStock = {
       id: idCounter,
-      color: "",
-      size: "",
+      colorID: "",
+      sizeID: "",
       quantity: 0,
     };
     setStocks([...stocks, newStock]);
