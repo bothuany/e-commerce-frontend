@@ -52,8 +52,6 @@ The features of the e-commerce system include:
 
 **API**: <https://github.com/bothuany/e-commerce-api>
 
-**Deployed API**: <https://e-commerce-api-7h0b.onrender.com>
-
 **Frontend (React App)**: <https://github.com/bothuany/e-commerce-frontend>
 
 **Deployed Frontend**: <https://wearwell-shopping.vercel.app/>
