@@ -1,73 +1,113 @@
-## Live Link: https://wearwell-shopping.vercel.app/
-## API Repository: https://github.com/bothuany/e-commerce-api
+# E-Commerce APP
 
-# Getting Started with Create React App
+  This repository provides an API for an e-commerce application. The API allows users to interact with various aspects of the e-commerce platform, such as managing products, handling customer orders, and processing payments. It serves as a backend system to support the frontend of an online store.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Team members:
 
-## Available Scripts
+- Recep Batuhan Dikmen
+- İrem Akanoğlu
+- Çağla Şen
 
-In the project directory, you can run:
+### Roles:
 
-### `npm start`
+- Admin
+- Customer
+- Seller
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Note:**  The admin does not have an admin panel yet in frontend. He can do what he wants with API tools like Postman.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Functional Requirements
 
-### `npm test`
+The features of the e-commerce system include:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Authentication
+- Product Listing
+- Product Details
+- Cart Management
+- Order Management
+- User Management
+- Search & Filtering
+- Discounts & Promotions
+- Stock Management
 
-### `npm run build`
+# How to run:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    git clone https://github.com/bothany/e-commerce-api.git 
+    git clone https://github.com/bothany/e-commerce-frontend.git 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### API Installation:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    cd e-commerce-api/target
+    java -jar app.jar
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Frontend:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    cd e-commerce-frontend
+    npm install
+    npm start
+<br/>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**Important Note:** The API we have deployed shuts itself down when not in use, so it may take 3-5 minutes to initially run when trying to log in.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+**API**: <https://github.com/bothuany/e-commerce-api>
 
-## Learn More
+**Deployed API**: <https://e-commerce-api-7h0b.onrender.com>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**Frontend (React App)**: <https://github.com/bothuany/e-commerce-frontend>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Deployed Frontend**: <https://wearwell-shopping.vercel.app/>
 
-### Code Splitting
+# ER Diagram
+<br/>
+<img width="1064" alt="er" src="https://github.com/AnadoluUniversityCeng/bim308-project-bothuany/assets/62702645/b223fc25-fef1-4efc-acfe-960a1ebe86bd">
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
+<br/>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Images
 
-### Making a Progressive Web App
+### Sign In/Create Account:
+<br/>
+<img width="1064" alt="create_account_1" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/18a658da-e2ec-40a2-b2cb-0522bee0df1f">
+<br/>
+<img width="1058" alt="create_account_2" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/ef0b6c33-620b-414c-923a-931dab9a3b74">
+<br/>
+<img width="1064" alt="sign_in" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/2a0f1fae-0b96-4452-b046-70b42b947d3e">
+<br/>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Home Page:
+<br/>
+<img width="1064" alt="homepage_img" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/d6ea81ec-7e0a-495e-aadf-20bc7e3aeb6c">
+<br/>
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Product Details:
+<br/>
+<img width="1061" alt="product_details_1" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/07d1dfea-1c2d-4dbe-aef7-712ad3a8fefc">
+<br/>
+<img width="1060" alt="product_details_2" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/10e47b56-3bc6-4bb3-b802-21a538cef7e4">
+<br/>
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Search Page:
+<br/>
+<img width="1063" alt="search_page_1" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/a82acc46-ed84-4a3c-983a-d83e71c7ca6b">
+<br/>
+<img width="1065" alt="search_page_2" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/f94cf86f-32ca-44cb-bf7f-989dd7680976">
+<br/>
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Add/Delete Product:
+<br/>
+<img width="1065" alt="add_product_page_image" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/85285cb8-dc53-40a1-a531-52eb0342c0d2">
+<br/>
+<img width="1063" alt="delete_product" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/ec023692-8240-40be-8a3e-1d8d0bcf1b62">
+<br/>
+
+### Shopping Cart/Secure Checkout:
+<br/>
+<img width="1066" alt="shopping_cart" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/2220ced7-c405-4a1f-bee7-327e71946d20">
+<br/>
+<img width="1069" alt="checkout" src="https://github.com/bothuany/e-commerce-frontend/assets/62702645/b9ff7026-5650-418c-b446-704c5db6bf75">
+
